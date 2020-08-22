@@ -10,7 +10,8 @@ def home_view(request, *args, **kwargs):
 
 
 def contact_view(request, *args, **kwargs):
-    return render(request, "contact.html", {})
-
-
-
+    my_contact = {'title': 'Doctor',
+                  'number': 123,
+                  'my_friends': [1, 2, 3, 4, 5, 6]
+                  }
+    return render(request, "contact.html", my_contact)
