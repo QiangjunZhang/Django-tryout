@@ -1,7 +1,8 @@
 {% extends "articles/base.html" %}
 {% block content %}
-<div class="container">
 
+
+<div class="container">
 {% if articles_list %}
     <ul>
     {% for article in articles_list %}
@@ -12,10 +13,10 @@
     <p>No articles are available.</p>
 {% endif %}
 
-        <div class="col-sm-4">
-            <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
+    <div class="col-sm-4">
+        <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
         Return</a>
-        </div>
-</div>
+    </div>
 
+</div>
 {% endblock content %}

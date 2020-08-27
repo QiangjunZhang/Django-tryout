@@ -2,30 +2,45 @@
 {% block content %}
 
 <div class="container">
-<h1>
-    {{article.title}}
-</h1>
 
-<p>
-     {{article.pub_date}}
-</p>
+    <div class="text-center">
+        <h1>
+        {{article.title}}
+        </h1>
+    </div>
 
-<p>
-    {{article.content}}
-</p>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4 text-center">
+            <h4>
+                by {{article.author}}
+            </h4>
+        </div>
+        <div class="col-sm-4">
+            <h4>
+                {{article.pub_date}}
+            </h4>
+        </div>
+    </div>
+    <p>
+        {{article.content}}
+    </p>
+</div>
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-            <a href="{% url 'articles:edit' article.id%}" class="btn btn-primary" role="button">
-        Edit  </a>
-        </div>
-
-        <div class="col-sm-4">
-            <a href="{% url 'articles:delete' article.id%}" class="btn btn-danger" role="button">
-        Delete</a>
-        </div>
-
+        {% if user.username == article.author %}
+            <div class="col-sm-4">
+                <a href="{% url 'articles:edit' article.id%}" class="btn btn-primary" role="button">
+                Edit  </a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{% url 'articles:delete' article.id%}" class="btn btn-danger" role="button">
+                Delete</a>
+            </div>
+        {% else %}
+            <div class="col-sm-8"></div>
+        {% endif %}
         <div class="col-sm-4">
             <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
         Return</a>

@@ -1,7 +1,9 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
+
+from .forms import ArticleForm
 from .models import Article
 
 
@@ -29,17 +31,27 @@ def detail(request, article_id):
     return render(request, 'articles/detail.html', {'article': article})
 
 
+def profile(request):
+    print(request.user.username)
+    article_list = Article.objects.filter(author=request.user.username)
+    return render(request, 'articles/profile.html', {'article_list': article_list})
+
+
 def article_create_view(request):
-    return render(request, "articles/create_article.html")
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            content = form.cleaned_data.get('content')
+            newPost = Article(title=title, content=content,
+                           author=request.user.username, pub_date=timezone.now()
+                           )
+            newPost.save()
+            return redirect('articles:index')
 
-
-def article_save_view(request):
-    new_article = Article()
-    new_article.title = request.POST['title']
-    new_article.content = request.POST['content']
-    new_article.pub_date = timezone.now()
-    new_article.save()
-    return HttpResponseRedirect(reverse('articles:detail', args=(new_article.id,)))
+    else:
+        form = ArticleForm()
+    return render(request, 'articles/create_article.html', {'form': form})
 
 
 def article_delete_view(request, article_id):
