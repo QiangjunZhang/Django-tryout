@@ -1,4 +1,7 @@
+{% extends "articles/base.html" %}
+{% block content %}
 
+<div class="container">
 <form action="{% url 'articles:save' %}" method="post">
 
     {% csrf_token %}
@@ -11,4 +14,5 @@
     <input type = 'submit' value='save' />
 
 </form>
-
+</div>
+{% endblock content %}

@@ -1,21 +1,28 @@
+{% extends "articles/base.html" %}
+{% block content %}
+
+<div class="container">
 <h1>
     {{article.title}}
 </h1>
 
 <p>
+     {{article.pub_date}}
+</p>
+
+<p>
     {{article.content}}
 </p>
 
-<h2>
-     {{article.pub_date}}
-</h2>
 
-<ul>
 
-    <li><a href="{% url 'articles:edit' article.id%}">Edit</a></li><br>
+<a href="{% url 'articles:edit' article.id%}">Edit</a><br>
 
-    <li><a href="{% url 'articles:index'%}">Return</a></li><br>
 
-    <li><a href="{% url 'articles:delete' article.id%}">Delete?</a></li>
+<a href="{% url 'articles:index'%}">Return</a><br>
 
-</ul>
+
+<a href="{% url 'articles:delete' article.id%}">Delete?</a>
+</div>
+{% endblock content %}
+

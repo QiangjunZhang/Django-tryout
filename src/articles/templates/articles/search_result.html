@@ -1,6 +1,6 @@
-<h1>
-    Jun's Blog
-</h1>
+{% extends "articles/base.html" %}
+{% block content %}
+<div class="container">
 
 {% if articles_list %}
     <ul>
@@ -9,9 +9,10 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>No polls are available.</p>
+    <p>No articles are available.</p>
 {% endif %}
 
 <ul>
     <li><a href="{% url 'articles:create' %}">Create a new article</a></li>
-</ul>
+</ul></div>
+{% endblock content %}

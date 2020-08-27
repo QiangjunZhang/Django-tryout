@@ -1,23 +1,34 @@
-<h1>
-    Jun's Blog
-</h1>
+{% extends "articles/base.html" %}
+{% block content %}
 
+<!-- Search Form -->
+<div class="text-center">
 <form action="{% url 'articles:search' %}" method="post">
     {% csrf_token %}
-    <input id="search" type="text" name="condition"><br>
+    <input id="search" type="text" name="condition">
     <input type = 'submit' value='search' />
 </form>
+</div>
 
 {% if articles_list %}
-    <ul>
-    {% for article in articles_list %}
-        <li><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></li>
-    {% endfor %}
-    </ul>
+    <div class="container p-3 my-3">
+      <div class="row">
+        {% for article in articles_list %}
+        <div class="col-sm-4">
+        <h3><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></h3>
+        <p>{{article.content}}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
 
-<ul>
-    <li><a href="{% url 'articles:create' %}">Create a new article</a></li>
-</ul>
+<div class="container">
+    <a href="{% url 'articles:create' %}">Create a new article</a><br>
+    <a href="{% url 'users:register' %}">Register an account</a>
+</div>
+
+
+{% endblock content %}
