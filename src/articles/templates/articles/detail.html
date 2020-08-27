@@ -10,8 +10,12 @@
      {{article.pub_date}}
 </h2>
 
-
 <ul>
-    <li><a href="{% url 'articles:delete' article.id %}">Delete this post?</a></li>
+
+    <li><a href="{% url 'articles:edit' article.id%}">Edit</a></li><br>
+
+    <li><a href="{% url 'articles:index'%}">Return</a></li><br>
+
+    <li><a href="{% url 'articles:delete' article.id%}">Delete?</a></li>
 
 </ul>

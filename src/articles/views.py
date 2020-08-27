@@ -2,8 +2,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
-
-from .forms import ArticleForm
 from .models import Article
 
 
@@ -14,6 +12,16 @@ def index(request):
         'articles_list': articles_list,
     }
     return render(request, 'articles/index.html', context)
+
+
+def search(request):
+    articles_list = Article.objects.filter(
+        title__icontains=request.POST['condition']
+    )
+    context = {
+        'articles_list': articles_list,
+    }
+    return render(request, 'articles/search_result.html', context)
 
 
 def detail(request, article_id):
@@ -38,4 +46,18 @@ def article_delete_view(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
     article.delete()
     return HttpResponseRedirect(reverse('articles:index'))
+
+
+def article_edit_view(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    return render(request, "articles/edit_article.html", {'article': article})
+
+
+def article_update_view(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    article.title = request.POST['title']
+    article.content = request.POST['content']
+    article.pub_date = timezone.now()
+    article.save()
+    return HttpResponseRedirect(reverse('articles:detail', args=(article.id,)))
 

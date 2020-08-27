@@ -2,12 +2,6 @@
     Jun's Blog
 </h1>
 
-<form action="{% url 'articles:search' %}" method="post">
-    {% csrf_token %}
-    <input id="search" type="text" name="condition"><br>
-    <input type = 'submit' value='search' />
-</form>
-
 {% if articles_list %}
     <ul>
     {% for article in articles_list %}
