@@ -14,15 +14,25 @@
     {{article.content}}
 </p>
 
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <a href="{% url 'articles:edit' article.id%}" class="btn btn-primary" role="button">
+        Edit  </a>
+        </div>
 
+        <div class="col-sm-4">
+            <a href="{% url 'articles:delete' article.id%}" class="btn btn-danger" role="button">
+        Delete</a>
+        </div>
 
-<a href="{% url 'articles:edit' article.id%}">Edit</a><br>
+        <div class="col-sm-4">
+            <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
+        Return</a>
+        </div>
 
-
-<a href="{% url 'articles:index'%}">Return</a><br>
-
-
-<a href="{% url 'articles:delete' article.id%}">Delete?</a>
+    </div>
 </div>
+
 {% endblock content %}
 

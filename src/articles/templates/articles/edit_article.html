@@ -1,6 +1,7 @@
 {% extends "articles/base.html" %}
 {% block content %}
 
+<div class="container">
 <form action="{% url 'articles:update' article.id %}" method="post">
 
     {% csrf_token %}
@@ -13,9 +14,9 @@
     <textarea id="content" name="content" rows="20" cols="50">
         {{article.content}}
     </textarea><br>
-    <input type = 'submit' value='save' />
+    <input type = 'submit' class="btn btn-success" role="button" value='save' />
 
 </form>
-
+</div>
 {% endblock content %}
 

@@ -2,13 +2,35 @@
 {% block content %}
 
 <!-- Search Form -->
-<div class="text-center">
-<form action="{% url 'articles:search' %}" method="post">
-    {% csrf_token %}
-    <input id="search" type="text" name="condition">
-    <input type = 'submit' value='search' />
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <a href="{% url 'articles:create' %}" class="btn btn-primary" role="button">
+            Post a new article </a>
+        </div>
+        <div class="col-sm-4">
+            <form action="{% url 'articles:search' %}" method="post">
+            {% csrf_token %}
+            <input id="search" type="text" name="condition">
+            <input type = 'submit' value='search' />
+            </form>
+        </div>
+        <div class="col-sm-4">
+            {% if user.is_authenticated %}
+            <a class="btn btn-success" role="button">
+            Welcome, {{user.username}}  </a>
+            <a href="{% url 'users:loginOut' %}" class="btn btn-success" role="button">
+            Login out </a>
+
+            {% else %}
+            <a href="{% url 'users:login' %}" class="btn btn-success" role="button">
+            Login  </a>
+            <a href="{% url 'users:register' %}" class="btn btn-success" role="button">
+        Register</a>
+            {% endif %}
+        </div>
 </div>
+
 
 {% if articles_list %}
     <div class="container p-3 my-3">
@@ -26,8 +48,12 @@
 {% endif %}
 
 <div class="container">
-    <a href="{% url 'articles:create' %}">Create a new article</a><br>
-    <a href="{% url 'users:register' %}">Register an account</a>
+    <div class="row">
+        <div class="col-sm-4">
+
+        </div>
+
+    </div>
 </div>
 
 

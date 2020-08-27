@@ -1,16 +1,12 @@
-<h1>
-    Welcome, please login to your account.
-</h1>
+{% extends "articles/base.html" %}
 
-<form action="{% url 'articles:save' %}" method="post">
-
+{% block content %}
+<div class="container">
+  <h2>Login</h2>
+  <form method="post">
     {% csrf_token %}
-    <label for="title">Your name: </label><br>
-    <input id="title" type="text" name="title" placeholder="Your title"><br>
-
-    <label for="content">Write your blog here: </label><br>
-<!--    <input  type="text" name="content" placeholder="Your content"><br>-->
-    <textarea id="content" name="content" rows="20" cols="50"></textarea><br>
-    <input type = 'submit' value='save' />
-
-</form>
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success" role="button" >Login</button>
+  </form>
+</div>
+{% endblock %}
