@@ -1,0 +1,17 @@
+<h1>
+    {{article.title}}
+</h1>
+
+<p>
+    {{article.content}}
+</p>
+
+<h2>
+     {{article.pub_date}}
+</h2>
+
+
+<ul>
+    <li><a href="{% url 'articles:delete' article.id %}">Delete this post?</a></li>
+
+</ul>

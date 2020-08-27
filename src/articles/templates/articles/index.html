@@ -1,0 +1,17 @@
+<h1>
+    Jun's Blog
+</h1>
+
+{% if articles_list %}
+    <ul>
+    {% for article in articles_list %}
+        <li><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+<ul>
+    <li><a href="{% url 'articles:create' %}">Create a new article</a></li>
+</ul>
