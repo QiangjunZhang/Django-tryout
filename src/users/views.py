@@ -1,23 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .forms import LoginForm, UserForm, ProfileForm
 
 
 def account_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=raw_password)
+    form = LoginForm(request.POST or None)
+    if request.POST and form.is_valid():
+        user = form.login(request)
+        if user:
             login(request, user)
-            return redirect('articles:index')
-
-    else:
-        form = LoginForm()
+            return redirect('articles:profile')
     return render(request, 'users/login.html', {'form': form})
 
 

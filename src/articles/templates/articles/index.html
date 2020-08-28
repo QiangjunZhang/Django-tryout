@@ -4,30 +4,10 @@
 <!-- Search Form -->
 <div class="container p-3 my-3">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-10"></div>
+        <div class="col-sm-2">
             <a href="{% url 'articles:create' %}" class="btn btn-primary" role="button">
             Post a new article </a>
-        </div>
-        <div class="col-sm-4">
-            <form action="{% url 'articles:search' %}" method="post">
-            {% csrf_token %}
-            <input id="search" type="text" name="condition">
-            <input type = 'submit' value='search' />
-            </form>
-        </div>
-        <div class="col-sm-4">
-            {% if user.is_authenticated %}
-            <a href="{% url 'articles:profile' %}" class="btn btn-success" role="button">
-            Welcome, {{user.username}}  </a>
-            <a href="{% url 'users:loginOut' %}" class="btn btn-success" role="button">
-            Login out </a>
-
-            {% else %}
-            <a href="{% url 'users:login' %}" class="btn btn-success" role="button">
-            Login  </a>
-            <a href="{% url 'users:register' %}" class="btn btn-success" role="button">
-        Register</a>
-            {% endif %}
         </div>
 </div>
 
@@ -36,21 +16,19 @@
     <div class="container p-3 my-3">
       <div class="row">
         {% for article in articles_list %}
-          <div class="col-sm-4">
-          <div class="media border p-3">
+          <div class="col-sm-12">
+          <div class="media border p-2">
             <img src="{{article.author.profile.image.url}}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
             <div class="media-body">
-              <h4><a href="{% url 'articles:detail' article.id %}">{{ article.title }} <small><i>{{article.pub_date}}</i></small></h4>
+              <h4>
+                  <a href="{% url 'articles:detail' article.id %}"> {{ article.title }} </a>
+                  <br>
+                  <small><p>{{article.pub_date.date}}</p></small>
+              </h4>
               <p>{{article.content | linebreaks}}</p>
             </div>
+          </div><br>
           </div>
-          </div>
-
-
-<!--        <div class="col-sm-4">-->
-<!--        <h3><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></h3>-->
-<!--        <p>{{article.content | linebreaks}}</p>-->
-<!--        </div>-->
         {% endfor %}
       </div>
     </div>

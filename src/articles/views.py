@@ -9,7 +9,7 @@ from .models import Article, Comments
 
 
 def index(request):
-    articles_list = Article.objects.order_by('id')
+    articles_list = Article.objects.order_by("-pub_date")
     context = {
         'articles_list': articles_list,
     }

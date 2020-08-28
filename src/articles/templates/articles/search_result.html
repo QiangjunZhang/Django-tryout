@@ -3,20 +3,23 @@
 <div class="container">
 
 {% if articles_list %}
-    {% for article in articles_list %}
-        <div class="row">
-            <div class="col-sm-8">
-            <a href="{% url 'articles:detail' article.id %}">
-                {{forloop.counter}}. {{ article.title }} </a>
+    <div class="container p-3 my-3">
+      <div class="row">
+        {% for article in articles_list %}
+          <div class="col-sm-12">
+          <div class="media border p-2">
+            <img src="{{article.author.profile.image.url}}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+            <div class="media-body">
+              <h4><a href="{% url 'articles:detail' article.id %}"> {{ article.title }} </a> <small><i>{{article.pub_date}}</i></small></h4>
+              <p>{{article.content | linebreaks}}</p>
             </div>
-            <div class="col-sm-4">
-            <a href="{% url 'articles:detail' article.id %}">
-                {{ article.pub_date }} </a>
-            </div>
-        </div>
-    {% endfor %}
+          </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
 {% else %}
-    <p>No articles are available.</p>
+    <p>No Articles are available.</p>
 {% endif %}
 
         <div class="col-sm-4 p-5">

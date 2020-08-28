@@ -1,16 +1,13 @@
 {% extends "articles/base.html" %}
 {% block content %}
+{% load crispy_forms_tags %}
 
+<br>
+<br>
 <div class="container">
-<form method="post">
-
+  <form method="post">
     {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-      </p>
-    {% endfor %}
+    {{ form|crispy }}
     <input type = 'submit' class="btn btn-success" role="button" value='save' />
 
 </form>

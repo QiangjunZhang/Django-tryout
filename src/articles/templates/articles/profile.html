@@ -4,26 +4,22 @@
 
 <div class="container mt-3">
   <div class="media border p-3">
-    <img src= "{{ user.profile.image.url }}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+    <img src= "{{ user.profile.image.url }}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:70px;">
     <div class="media-body">
       <h4>{{user.username}} {{user.first_name}} {{user.last_name}}<small><i>{{timezone.now}}</i></small></h4>
         <p>{{user.email}}</p>
         <p>{{user.profile.bio}}</p>
+        <a href="{% url 'users:update'%}" class="btn btn-light" role="button">
+        Edit Profile</a>
     </div>
   </div>
-
-
-   <div class="col-sm-4 p-3">
-        <a href="{% url 'users:update'%}" class="btn btn-success" role="button">
-        Edit Profile</a>
-   </div>
 </div>
 
-
+<br>
 <div class="container">
-    <h2>
+    <h4>
         My post history
-    </h2>
+    </h4>
     {% if articles_list %}
         {% for article in articles_list %}
             <div class="row">
@@ -32,20 +28,18 @@
                     {{forloop.counter}}. {{ article.title }} </a>
                 </div>
                 <div class="col-sm-4">
-                <a href="{% url 'articles:detail' article.id %}">
-                    {{ article.pub_date }} </a>
+                    {{ article.pub_date }}
                 </div>
             </div>
         {% endfor %}
     {% else %}
         <p>No articles are available.</p>
     {% endif %}
+    <br>
 
-
-
-    <h2>
+    <h4>
         My comment history
-    </h2>
+    </h4>
     {% if comments_list %}
     {% for comment in comments_list %}
         <div class="row">
@@ -58,14 +52,11 @@
             </div>
         </div>
     {% endfor %}
+
     {% else %}
         <p>No comments are available.</p>
     {% endif %}
 
-    <div class="col-sm-4 p-3">
-        <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
-        Return</a>
-    </div>
 
 </div>
 {% endblock content %}
