@@ -1,0 +1,14 @@
+{% extends "articles/base.html" %}
+{% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="container">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ user_form|crispy }}
+    {{ profile_form|crispy }}
+  <button type="submit">Save changes</button>
+</form>
+</div>
+{% endblock content %}

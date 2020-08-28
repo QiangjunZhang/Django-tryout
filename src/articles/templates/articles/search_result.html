@@ -3,16 +3,23 @@
 <div class="container">
 
 {% if articles_list %}
-    <ul>
     {% for article in articles_list %}
-        <li><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></li>
+        <div class="row">
+            <div class="col-sm-8">
+            <a href="{% url 'articles:detail' article.id %}">
+                {{forloop.counter}}. {{ article.title }} </a>
+            </div>
+            <div class="col-sm-4">
+            <a href="{% url 'articles:detail' article.id %}">
+                {{ article.pub_date }} </a>
+            </div>
+        </div>
     {% endfor %}
-    </ul>
 {% else %}
     <p>No articles are available.</p>
 {% endif %}
 
-        <div class="col-sm-4">
+        <div class="col-sm-4 p-5">
             <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
         Return</a>
         </div>

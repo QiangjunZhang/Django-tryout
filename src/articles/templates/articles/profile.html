@@ -1,19 +1,68 @@
 {% extends "articles/base.html" %}
 {% block content %}
+{% load static %}
+
+<div class="container mt-3">
+  <div class="media border p-3">
+    <img src= "{{ user.profile.image.url }}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+    <div class="media-body">
+      <h4>{{user.username}} {{user.first_name}} {{user.last_name}}<small><i>{{timezone.now}}</i></small></h4>
+        <p>{{user.email}}</p>
+        <p>{{user.profile.bio}}</p>
+    </div>
+  </div>
+
+
+   <div class="col-sm-4 p-3">
+        <a href="{% url 'users:update'%}" class="btn btn-success" role="button">
+        Edit Profile</a>
+   </div>
+</div>
 
 
 <div class="container">
-{% if articles_list %}
-    <ul>
-    {% for article in articles_list %}
-        <li><a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No articles are available.</p>
-{% endif %}
+    <h2>
+        My post history
+    </h2>
+    {% if articles_list %}
+        {% for article in articles_list %}
+            <div class="row">
+                <div class="col-sm-8">
+                <a href="{% url 'articles:detail' article.id %}">
+                    {{forloop.counter}}. {{ article.title }} </a>
+                </div>
+                <div class="col-sm-4">
+                <a href="{% url 'articles:detail' article.id %}">
+                    {{ article.pub_date }} </a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No articles are available.</p>
+    {% endif %}
 
-    <div class="col-sm-4">
+
+
+    <h2>
+        My comment history
+    </h2>
+    {% if comments_list %}
+    {% for comment in comments_list %}
+        <div class="row">
+            <div class="col-sm-8">
+            <a href="{% url 'articles:detail' comment.article.id %}">
+                {{forloop.counter}}. {{ comment.article.title }} </a>
+            </div>
+            <div class="col-sm-4">
+                {{ comment.pub_date }} </a>
+            </div>
+        </div>
+    {% endfor %}
+    {% else %}
+        <p>No comments are available.</p>
+    {% endif %}
+
+    <div class="col-sm-4 p-3">
         <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
         Return</a>
     </div>

@@ -1,6 +1,6 @@
 {% extends "articles/base.html" %}
 {% block content %}
-
+{% load static %}
 <div class="container">
 
     <div class="text-center">
@@ -23,13 +23,41 @@
         </div>
     </div>
     <p>
-        {{article.content}}
+        {{article.content | linebreaks}}
     </p>
 </div>
 
+{% if comments_list %}
+    <div class="container p-3 my-3">
+        {% for comment in comments_list %}
+          <div class="media border p-3">
+            <img src="{{comment.author.profile.image.url}}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+            <div class="media-body">
+              <h4>{{ comment.author.username}} <small><i>{{comment.pub_date}}</i></small></h4>
+              <p>{{comment.content}}</p>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+{% else %}
+{% endif %}
+
+<div class="container">
+    <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field }}
+      </p>
+    {% endfor %}
+    <input type = 'submit' class="btn btn-success" role="button" value='Comment' />
+    </form>
+</div>
+
+
 <div class="container">
     <div class="row">
-        {% if user.username == article.author %}
+        {% if user == article.author %}
             <div class="col-sm-4">
                 <a href="{% url 'articles:edit' article.id%}" class="btn btn-primary" role="button">
                 Edit  </a>
@@ -45,9 +73,10 @@
             <a href="{% url 'articles:index'%}" class="btn btn-success" role="button">
         Return</a>
         </div>
-
     </div>
 </div>
+
+
 
 {% endblock content %}
 

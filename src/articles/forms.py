@@ -18,3 +18,10 @@ class ArticleForm(forms.Form):
         else:
             return title
 
+
+class CommentForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea(
+        attrs={"class": "new-class-name two",
+               "rows": 10,
+               "cols": 50
+               }))
