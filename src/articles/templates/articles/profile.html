@@ -6,13 +6,24 @@
   <div class="media border p-3">
     <img src= "{{ user.profile.image.url }}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:70px;">
     <div class="media-body">
-      <h4>{{user.username}} {{user.first_name}} {{user.last_name}}<small><i>{{timezone.now}}</i></small></h4>
+      <h4> {{user.first_name}} {{user.last_name}}<small><i>{{timezone.now}}</i></small></h4>
         <p>{{user.email}}</p>
         <p>{{user.profile.bio}}</p>
         <a href="{% url 'users:update'%}" class="btn btn-light" role="button">
         Edit Profile</a>
     </div>
+
   </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Success!</strong>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
 </div>
 
 <br>
@@ -55,6 +66,27 @@
 
     {% else %}
         <p>No comments are available.</p>
+    {% endif %}
+
+    <br>
+    <h4>
+        My liked history
+    </h4>
+    {% if liked_list %}
+    {% for liked in liked_list %}
+        <div class="row">
+            <div class="col-sm-8">
+            <a href="{% url 'articles:detail' liked.article.id %}">
+                {{forloop.counter}}. {{ liked.article.title }} </a>
+            </div>
+            <div class="col-sm-4">
+                {{ liked.article.pub_date }} </a>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% else %}
+        <p>No liked articles are available.</p>
     {% endif %}
 
 

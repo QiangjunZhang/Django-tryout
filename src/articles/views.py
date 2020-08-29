@@ -1,12 +1,11 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
 from .forms import ArticleForm, CommentForm
-from .models import Article, Comments
+from .models import Article, Comments, Favourite
+
 
 # Create your views here.
-
 
 def index(request):
     articles_list = Article.objects.order_by("-pub_date")
@@ -29,42 +28,41 @@ def search(request):
 def detail(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
     comments_list = Comments.objects.filter(article=article)
+    if request.user.is_authenticated:
+        favourite, created = Favourite.objects.get_or_create(article=article, author=request.user)
+    else:
+        favourite = None
     if request.method == 'POST':
-        form = CommentForm(request.POST)
+        newComment = Comments(article=article, author=request.user, pub_date=timezone.now())
+        form = CommentForm(request.POST, instance=newComment)
         if form.is_valid():
-            content = form.cleaned_data.get('content')
-            newComment = Comments(article=article, content=content,
-                                  author=request.user, pub_date=timezone.now()
-                                  )
-            newComment.save()
+            form.save()
             return redirect(reverse('articles:detail', args=(article.id,)))
     else:
         form = CommentForm()
-    return render(request, 'articles/detail.html', {'article': article,
-                                                    'form': form, 'comments_list':
-                                                        comments_list}
-                  )
+    context = {'article': article,
+               'form': form, 'comments_list':
+                   comments_list, 'favourite': favourite}
+    return render(request, 'articles/detail.html', context)
 
 
 def profile(request):
     articles_list = Article.objects.filter(author=request.user)
     comments_list = Comments.objects.filter(author=request.user)
+    liked_list = Favourite.objects.filter(author=request.user, liked=True)
     context = {'articles_list': articles_list,
                'comments_list': comments_list,
-    }
+               'liked_list': liked_list,
+               }
     return render(request, 'articles/profile.html', context)
 
 
 def article_create_view(request):
+    new_article = Article(author=request.user, pub_date=timezone.now())
     if request.method == 'POST':
-        form = ArticleForm(request.POST)
+        form = ArticleForm(request.POST, instance=new_article)
         if form.is_valid():
-            title = form.cleaned_data.get('title')
-            content = form.cleaned_data.get('content')
-            newPost = Article(title=title, content=content,
-                              author=request.user, pub_date=timezone.now()
-                              )
-            newPost.save()
+            form.save()
             return redirect('articles:index')
     else:
         form = ArticleForm()
@@ -74,18 +72,27 @@ def article_create_view(request):
 def article_delete_view(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
     article.delete()
-    return HttpResponseRedirect(reverse('articles:index'))
+    return redirect(reverse('articles:index'))
 
 
 def article_edit_view(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
-    return render(request, "articles/edit_article.html", {'article': article})
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('articles:detail', args=(article.id,)))
+    else:
+        form = ArticleForm(instance=article)
+    return render(request, "articles/edit_article.html",  {'form': form})
 
 
-def article_update_view(request, article_id):
+def article_like(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
-    article.title = request.POST['title']
-    article.content = request.POST['content']
-    article.pub_date = timezone.now()
+    favourite, created = Favourite.objects.get_or_create(article=article, author=request.user)
+    favourite.liked = not favourite.liked
+    favourite.save()
+    article.count()
     article.save()
-    return HttpResponseRedirect(reverse('articles:detail', args=(article.id,)))
+    return redirect(reverse('articles:detail', args=(article.id,)))
+

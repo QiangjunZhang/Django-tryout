@@ -18,29 +18,41 @@
         </div>
         <div class="col-sm-2">
             <p>
-                {{article.author}}<br>
+                {{article.author.first_name}} {{article.author.last_name}}<br>
                 {{article.pub_date.date}}
             </p>
         </div>
     </div>
 </div>
     <div class="container" >
-        {{article.content | linebreaks}}
+        {{article.content | safe}}
     </div>
 
 <div class="container">
     <div class="row">
-        {% if user == article.author %}
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4 text-center">
+            {{article.like_count}} &nbsp;
+            {% if user.is_authenticated %}
+                {% if favourite.liked %}
+                        <a href="{% url 'articles:like' article.id%}" class="btn btn-success" role="button">
+                        Like  </a>
+                {% else %}
+                        <a href="{% url 'articles:like' article.id%}" class="btn btn-light" role="button">
+                        Like  </a>
+                {% endif %}
+            {% else %}
+            {% endif %}
+        </div>
 
-            <div class="col-sm-10"></div>
-            <div class="col-sm-2">
+        {% if user == article.author %}
+            <div class="col-sm-4 text-right">
                 <a href="{% url 'articles:edit' article.id%}" class="btn btn-light" role="button">
                 Edit  </a>
                 <a href="{% url 'articles:delete' article.id%}" class="btn btn-light" role="button">
                 Delete</a>
             </div>
         {% else %}
-            <div class="col-sm-8"></div>
         {% endif %}
     </div>
 </div>
@@ -49,40 +61,38 @@
     <div class="container p-3 my-3">
         {% for comment in comments_list %}
           <div class="media border p-3">
-            <img src="{{comment.author.profile.image.url}}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+            <img src="{{comment.author.profile.image.url}}" alt="Account"
+                 class="mr-3 mt-3 rounded-circle" style="width:50px;">
             <div class="media-body">
-              <h4>{{ comment.author.username}} <small> &nbsp; &nbsp; &nbsp; <i>{{comment.pub_date}}</i></small></h4>
-              <p>{{comment.content | linebreaks}}</p>
+              <h6>{{ comment.author.first_name}}  {{ comment.author.last_name}}
+                  <small> &nbsp; &nbsp; &nbsp; {{comment.pub_date}} </small></h6>
+              <p>{{comment.content | safe | linebreaks}}</p>
             </div>
           </div><br>
         {% endfor %}
     </div>
 {% else %}
 {% endif %}
-
+<br>
 <div class="container text-center">
 {% if user.is_authenticated %}
     <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field }}
-      </p>
-    {% endfor %}
+      {% csrf_token %}
+      {{form.media}}
+        {% for field in form %}
+        {{field}}
+        {% endfor %}
+        <br>
     <input type = 'submit' class="btn btn-success" role="button" value='Comment' />
     </form>
 {% else %}
-    <p> Want comment?</p>
+    <p> Leave a comment?</p>
     <a href="{% url 'users:login' %}" class="btn btn-success" role="button">
         Login  </a>
 {% endif %}
 </div>
 <br>
 <br>
-
-
-
-
 
 {% endblock content %}
 

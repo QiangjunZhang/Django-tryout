@@ -2,6 +2,8 @@
 {% block content %}
 {% load static %}
 <!-- Search Form -->
+
+{% if user.is_authenticated %}
 <div class="container p-3 my-3">
     <div class="row">
         <div class="col-sm-10"></div>
@@ -10,10 +12,11 @@
             Post a new article </a>
         </div>
 </div>
+{% else %}
+{% endif %}
 
-
+<div class="container p-3 my-3">
 {% if articles_list %}
-    <div class="container p-3 my-3">
       <div class="row">
         {% for article in articles_list %}
           <div class="col-sm-12">
@@ -25,16 +28,15 @@
                   <br>
                   <small><p>{{article.pub_date.date}}</p></small>
               </h4>
-              <p>{{article.content | linebreaks}}</p>
+              <p>{{article.content | safe | truncatewords:40 }}</p>
             </div>
           </div><br>
           </div>
         {% endfor %}
       </div>
-    </div>
 {% else %}
     <p>No Articles are available.</p>
 {% endif %}
-
+</div>
 
 {% endblock content %}

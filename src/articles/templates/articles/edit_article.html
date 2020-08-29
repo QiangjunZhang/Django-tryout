@@ -2,20 +2,12 @@
 {% block content %}
 
 <div class="container">
-<form action="{% url 'articles:update' article.id %}" method="post">
 
+<form method="POST">
     {% csrf_token %}
-
-    <label for="title">Your name: </label><br>
-    <input id="title" type="text" name="title" value= "{{article.title}}"><br>
-
-    <label for="content">Write your blog here: </label><br>
-<!--    <input  type="text" name="content" placeholder="Your content"><br>-->
-    <textarea id="content" name="content" rows="20" cols="50">
-        {{article.content}}
-    </textarea><br>
+    {{ form.media }}
+    {{ form.as_p}}
     <input type = 'submit' class="btn btn-success" role="button" value='save' />
-
 </form>
 </div>
 {% endblock content %}

@@ -5,11 +5,14 @@
 <br>
 <br>
 <div class="container">
-  <form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <input type = 'submit' class="btn btn-success" role="button" value='save' />
 
-</form>
+  <div class="form-group">
+  <form method="post">
+      {% csrf_token %}
+      {{ form.media }}
+      {{ form.as_p}}
+    <button class="btn btn-success">Post </button>
+   </form>
 </div>
+  </div>
 {% endblock content %}
