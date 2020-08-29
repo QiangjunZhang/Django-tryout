@@ -11,7 +11,7 @@
             <img src="{{article.author.profile.image.url}}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
             <div class="media-body">
               <h4><a href="{% url 'articles:detail' article.id %}"> {{ article.title }} </a> <small><i>{{article.pub_date}}</i></small></h4>
-              <p>{{article.content | linebreaks}}</p>
+              <p>{{article.content | safe |linebreaks}}</p>
             </div>
           </div>
           </div>
