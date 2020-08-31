@@ -4,95 +4,88 @@
 <br>
 <br>
 <div class="container p-3 my-3">
-    <div class="text-center">
-        <h1>
-        {{article.title}}
-        </h1>
-    </div>
-    <br>
-
-    <div class="row">
-        <div class="col-sm-7" ></div>
-        <div class="col-sm-1" >
-            <img src= "{{article.author.profile.image.url}}" alt="Logo" class="rounded" style="width:50px;">
-        </div>
-        <div class="col-sm-2">
+    <div class="row justify-content-center">
+        <div class="col-sm-10">
+            <h1>
+            {{article.title}}
+            </h1>
+            <br>
+            <div class="row">
+                <div class="col-sm-4" ></div>
+                <div class="col-sm-1" >
+                    <img src= "{{article.author.profile.image.url}}" alt="Logo" class="rounded" style="width:50px;">
+                </div>
+                <div class="col-sm-2">
+                    <p>
+                        {{article.author.first_name}} {{article.author.last_name}}<br>
+                        {{article.pub_date.date}}
+                    </p>
+                </div>
+            </div>
             <p>
-                {{article.author.first_name}} {{article.author.last_name}}<br>
-                {{article.pub_date.date}}
+                {{article.content | safe}}
             </p>
-        </div>
-    </div>
-</div>
-    <div class="container" >
-        {{article.content | safe}}
-    </div>
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4 text-center">
+                    {{article.like_count}} &nbsp;
+                    {% if user.is_authenticated %}
+                        {% if favourite.liked %}
+                                <a href="{% url 'articles:like' article.id%}" class="btn btn-success" role="button">
+                                Like  </a>
+                        {% else %}
+                                <a href="{% url 'articles:like' article.id%}" class="btn btn-light" role="button">
+                                Like  </a>
+                        {% endif %}
+                    {% else %}
+                    {% endif %}
+                </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4 text-center">
-            {{article.like_count}} &nbsp;
-            {% if user.is_authenticated %}
-                {% if favourite.liked %}
-                        <a href="{% url 'articles:like' article.id%}" class="btn btn-success" role="button">
-                        Like  </a>
+                {% if user == article.author %}
+                    <div class="col-sm-4 text-right">
+                        <a href="{% url 'articles:edit' article.id%}" class="btn btn-light" role="button">
+                        Edit  </a>
+                        <a href="{% url 'articles:delete' article.id%}" class="btn btn-light" role="button">
+                        Delete</a>
+                    </div>
                 {% else %}
-                        <a href="{% url 'articles:like' article.id%}" class="btn btn-light" role="button">
-                        Like  </a>
                 {% endif %}
+            </div>
+            <br>
+
+            {% if comments_list %}
+                {% for comment in comments_list %}
+                  <div class="media border p-3">
+                    <img src="{{comment.author.profile.image.url}}" alt="Account"
+                         class="mr-3 mt-3 rounded-circle" style="width:50px;">
+                    <div class="media-body">
+                      <h6>{{ comment.author.first_name}}  {{ comment.author.last_name}}
+                          <small> &nbsp; &nbsp; &nbsp; {{comment.pub_date}} </small></h6>
+                      <p>{{comment.content | safe | linebreaks}}</p>
+                    </div>
+                  </div><br>
+                {% endfor %}
             {% else %}
             {% endif %}
+
+            {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                {{form.media}}
+                {% for field in form %}
+                {{field}}
+                {% endfor %}
+                <br>
+                <input type = 'submit' class="btn btn-success" role="button" value='Comment' />
+            </form>
+            {% else %}
+                <p> Leave a comment?</p>
+                <a href="{% url 'users:login' %}" class="btn btn-success" role="button">
+                    Login  </a>
+            {% endif %}
         </div>
-
-        {% if user == article.author %}
-            <div class="col-sm-4 text-right">
-                <a href="{% url 'articles:edit' article.id%}" class="btn btn-light" role="button">
-                Edit  </a>
-                <a href="{% url 'articles:delete' article.id%}" class="btn btn-light" role="button">
-                Delete</a>
-            </div>
-        {% else %}
-        {% endif %}
     </div>
 </div>
-
-{% if comments_list %}
-    <div class="container p-3 my-3">
-        {% for comment in comments_list %}
-          <div class="media border p-3">
-            <img src="{{comment.author.profile.image.url}}" alt="Account"
-                 class="mr-3 mt-3 rounded-circle" style="width:50px;">
-            <div class="media-body">
-              <h6>{{ comment.author.first_name}}  {{ comment.author.last_name}}
-                  <small> &nbsp; &nbsp; &nbsp; {{comment.pub_date}} </small></h6>
-              <p>{{comment.content | safe | linebreaks}}</p>
-            </div>
-          </div><br>
-        {% endfor %}
-    </div>
-{% else %}
-{% endif %}
-<br>
-<div class="container text-center">
-{% if user.is_authenticated %}
-    <form method="post">
-      {% csrf_token %}
-      {{form.media}}
-        {% for field in form %}
-        {{field}}
-        {% endfor %}
-        <br>
-    <input type = 'submit' class="btn btn-success" role="button" value='Comment' />
-    </form>
-{% else %}
-    <p> Leave a comment?</p>
-    <a href="{% url 'users:login' %}" class="btn btn-success" role="button">
-        Login  </a>
-{% endif %}
-</div>
-<br>
-<br>
 
 {% endblock content %}
 

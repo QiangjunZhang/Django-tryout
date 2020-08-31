@@ -10,10 +10,14 @@
           <div class="media border p-2">
             <img src="{{article.author.profile.image.url}}" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
             <div class="media-body">
-              <h4><a href="{% url 'articles:detail' article.id %}"> {{ article.title }} </a> <small><i>{{article.pub_date}}</i></small></h4>
-              <p>{{article.content | safe |linebreaks}}</p>
+              <h4>
+                  <a href="{% url 'articles:detail' article.id %}"> {{ article.title }} </a>
+                  <br>
+                  <small><p>{{article.pub_date.date}}</p></small>
+              </h4>
+              <p>{{article.content | safe | truncatewords:40 }}</p>
             </div>
-          </div>
+          </div><br>
           </div>
         {% endfor %}
       </div>
